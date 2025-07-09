@@ -10,31 +10,52 @@ import { useCarListing } from '@/components/context/CarListingContext';
 import dynamic from 'next/dynamic';
 import DashboardTableSkeleton from '@/components/dashboard/components/skeletons/DashboardTableSkeleton';
 import DashboardGridSkeleton from '@/components/dashboard/components/skeletons/DashboardGridSkeleton';
+import { CarListing } from '@/components/lib/dataStore';
+import { DataPagination } from '@/components/ui/data-pagination';
 import DashboardStatsSkeleton from '@/components/dashboard/components/skeletons/DashboardStatsSkeleton ';
-import { CarListing } from '../lib/dataStore';
 
 const DashboardStats = dynamic(
-    () => import('@/components/dashboard/components/DashboardStats'), {
-    ssr: false,
-    loading: () => <DashboardStatsSkeleton />
-}
-)
+    () => import('@/components/dashboard/components/DashboardStats'),
+    {
+        ssr: false,
+        loading: () => <DashboardStatsSkeleton />,
+    }
+);
 
 const DashboardTable = dynamic(
-    () => import('@/components/dashboard/components/DashboardTable'), {
-    ssr: false,
-    loading: () => <DashboardTableSkeleton />
-}
-)
+    () => import('@/components/dashboard/components/DashboardTable'),
+    {
+        ssr: false,
+        loading: () => <DashboardTableSkeleton />,
+    }
+);
+
 const DashboardGrid = dynamic(
-    () => import('@/components/dashboard/components/DashboardGrid'), {
-    ssr: false,
-    loading: () => <DashboardGridSkeleton />
-}
-)
+    () => import('@/components/dashboard/components/DashboardGrid'),
+    {
+        ssr: false,
+        loading: () => <DashboardGridSkeleton />,
+    }
+);
 
 const DashboardPage = () => {
-    const { filteredListings, totalPages, total, filters, loading, updateFilter, resetFilters, approveListingContext, rejectListingContext } = useCarListing();
+    const {
+        filteredListings,
+        totalPages,
+        total,
+        filters,
+        currentPage,
+        itemsPerPage,
+        pageSizeOptions,
+        loading,
+        updateFilter,
+        setCurrentPage,
+        setItemsPerPage,
+        resetFilters,
+        approveListingContext,
+        rejectListingContext,
+    } = useCarListing();
+
     const [showConfirmDialog, setShowConfirmDialog] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
     const [showFilters, setShowFilters] = useState(false);
@@ -66,7 +87,6 @@ const DashboardPage = () => {
                     <h1 className="text-3xl font-bold">Dashboard</h1>
                     <p className="text-gray-600">Manage car rental listings and review submissions</p>
                 </div>
-
                 <DashboardStats filteredListings={filteredListings} />
 
                 <DashboardFilters
@@ -101,12 +121,20 @@ const DashboardPage = () => {
                             />
                         )}
 
-                        {/* <DashboardPagination
-                            totalPages={totalPages}
-                            total={total}
-                            filters={filters}
-                            updateFilter={updateFilter}
-                        /> */}
+                        <div className="mt-4">
+                            <DataPagination
+                                currentPage={currentPage}
+                                totalItems={total}
+                                pageSize={itemsPerPage}
+                                onPageChange={setCurrentPage}
+                                onPageSizeChange={(size) => {
+                                    setItemsPerPage(size);
+                                    setCurrentPage(1);
+                                }}
+                                pageSizeOptions={pageSizeOptions}
+                                showingText="cars"
+                            />
+                        </div>
                     </>
                 )}
 

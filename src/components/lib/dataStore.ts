@@ -278,7 +278,7 @@ const auditLog: AuditLogEntry[] = [
         id: '1',
         listingId: '2',
         adminId: '1',
-        adminName: 'Admin User',
+        adminName: 'John Smith',
         action: 'approved',
         details: 'BMW X5 listing approved after verification - all documentation complete',
         timestamp: '2024-01-14T15:00:00Z'
@@ -286,8 +286,8 @@ const auditLog: AuditLogEntry[] = [
     {
         id: '2',
         listingId: '4',
-        adminId: '1',
-        adminName: 'Admin User',
+        adminId: '2',
+        adminName: 'Sarah Johnson',
         action: 'rejected',
         details: 'Ford Mustang rejected - vehicle condition does not meet standards, high mileage concern',
         timestamp: '2024-01-13T17:30:00Z'
@@ -295,8 +295,8 @@ const auditLog: AuditLogEntry[] = [
     {
         id: '3',
         listingId: '5',
-        adminId: '1',
-        adminName: 'Admin User',
+        adminId: '3',
+        adminName: 'Mike Wilson',
         action: 'approved',
         details: 'Honda CR-V approved - excellent condition, verified documentation and insurance',
         timestamp: '2024-01-12T12:00:00Z'
@@ -305,7 +305,7 @@ const auditLog: AuditLogEntry[] = [
         id: '4',
         listingId: '7',
         adminId: '1',
-        adminName: 'Admin User',
+        adminName: 'John Smith',
         action: 'approved',
         details: 'Jeep Wrangler approved - 4x4 capability verified, adventure package confirmed',
         timestamp: '2024-01-11T09:30:00Z'
@@ -313,8 +313,8 @@ const auditLog: AuditLogEntry[] = [
     {
         id: '5',
         listingId: '9',
-        adminId: '1',
-        adminName: 'Admin User',
+        adminId: '2',
+        adminName: 'Sarah Johnson',
         action: 'approved',
         details: 'Subaru Outback approved - AWD system tested, all-weather tires confirmed',
         timestamp: '2024-01-10T15:15:00Z'
@@ -331,8 +331,8 @@ const auditLog: AuditLogEntry[] = [
     {
         id: '7',
         listingId: '12',
-        adminId: '1',
-        adminName: 'Admin User',
+        adminId: '3',
+        adminName: 'Mike Wilson',
         action: 'approved',
         details: 'Volkswagen Jetta approved - compact design ideal for city driving, fuel efficient',
         timestamp: '2024-01-08T10:15:00Z'
@@ -340,8 +340,8 @@ const auditLog: AuditLogEntry[] = [
     {
         id: '8',
         listingId: '1',
-        adminId: '1',
-        adminName: 'Admin User',
+        adminId: '3',
+        adminName: 'Mike Wilson',
         action: 'edited',
         details: 'Toyota Camry listing updated - price adjusted from $92 to $89 per day',
         timestamp: '2024-01-07T14:20:00Z'
@@ -350,7 +350,7 @@ const auditLog: AuditLogEntry[] = [
         id: '9',
         listingId: '3',
         adminId: '1',
-        adminName: 'Admin User',
+        adminName: 'John Smith',
         action: 'edited',
         details: 'Tesla Model 3 - description updated to include autopilot features and charging info',
         timestamp: '2024-01-06T16:45:00Z'
@@ -358,8 +358,8 @@ const auditLog: AuditLogEntry[] = [
     {
         id: '10',
         listingId: '6',
-        adminId: '1',
-        adminName: 'Admin User',
+        adminId: '2',
+        adminName: 'Sarah Johnson',
         action: 'edited',
         details: 'Audi A4 - location updated from Manhattan to New York, NY for clarity',
         timestamp: '2024-01-05T11:30:00Z'
@@ -388,8 +388,8 @@ export const dataStore = {
         };
     },
 
-    getListing: (id: string) => {
-        return listings.find(listing => listing.id === id);
+    getListing: (code: string) => {
+        return listings.find(listing => listing.code === code);
     },
 
     updateListingStatus: (id: string, status: 'approved' | 'rejected', adminId: string, adminName: string) => {
@@ -413,6 +413,7 @@ export const dataStore = {
         }
         return null;
     },
+
     createListing: (listingData: Omit<CarListing, 'id' | 'submittedAt' | 'lastModified'>, userId: string, userName: string) => {
         const newListing: CarListing = {
             ...listingData,
@@ -437,6 +438,7 @@ export const dataStore = {
 
         return newListing;
     },
+
     updateListing: (id: string, updates: Partial<CarListing>, adminId: string, adminName: string) => {
         const listingIndex = listings.findIndex(listing => listing.id === id);
         if (listingIndex !== -1) {

@@ -79,7 +79,7 @@ const DashboardTable = ({
                     {listings.map((listing: any) => (
                         <TableRow key={listing.id}>
                             <TableCell>
-                                <div className="flex items-center">
+                                <div className="flex items-center flex-wrap">
                                     <Image
                                         src={listing.imageUrl}
                                         alt={listing.title}
@@ -91,11 +91,11 @@ const DashboardTable = ({
                                                 'https://images.unsplash.com/photo-1549924231-f129b911e442?w=400';
                                         }}
                                     />
-                                    <div className="ml-3">
-                                        <p className="text-sm font-medium text-gray-900">
+                                    <div className="mt-1 md:ml-3">
+                                        <p className="text-sm font-medium text-gray-900 truncate">
                                             {listing.year} {listing.make} {listing.model}
                                         </p>
-                                        <p className="text-xs text-gray-400">{listing.title}</p>
+                                        <p className="text-xs text-gray-400 truncate">{listing.title}</p>
                                     </div>
                                 </div>
                             </TableCell>

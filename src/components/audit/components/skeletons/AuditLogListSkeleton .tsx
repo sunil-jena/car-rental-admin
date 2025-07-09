@@ -1,21 +1,16 @@
 'use client';
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const AuditLogListSkeleton = () => {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>
-                    <Skeleton className="h-6 w-32" /> {/* Title skeleton */}
-                </CardTitle>
-                <CardDescription>
-                    <Skeleton className="h-4 w-48" /> {/* Description skeleton */}
-                </CardDescription>
-            </CardHeader>
+        <div className='rounded-lg border bg-white shadow-sm'>
+            <div className='flex flex-col space-y-1.5 p-6'>
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-48" />
+            </div>
 
-            <CardContent>
+            <div className='p-6'>
                 <div className="space-y-4">
                     {Array(5).fill(null).map((_, index) => (
                         <div
@@ -42,8 +37,8 @@ const AuditLogListSkeleton = () => {
                         </div>
                     ))}
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 };
 

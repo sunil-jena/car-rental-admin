@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { dataStore, CarListing } from '../lib/dataStore';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -8,13 +8,13 @@ import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Layout from '../layout/Layout';
 
-const CarForm = () => {
-    const { id } = useParams<{ id: string }>();
+const CarForm: FC<CarListing> = ({ ...data }) => {
+    // const { id } = useParams<{ id: string }>();
     const router = useRouter();
     const { user } = useAuth();
-    const [listing, setListing] = useState<CarListing | null>(null);
+    const [listing, setListing] = useState<CarListing | null>(data);
     const [isLoading, setIsLoading] = useState(false);
-    const isNewListing = id === 'new';
+    const isNewListing = data.id === 'new';
 
     // Form state
     const [formData, setFormData] = useState({
@@ -32,31 +32,27 @@ const CarForm = () => {
     });
 
     useEffect(() => {
-        if (id && id !== 'new') {
-            const foundListing = dataStore.getListing(id);
-            if (foundListing) {
-                setListing(foundListing);
-                setFormData({
-                    title: foundListing.title,
-                    description: foundListing.description,
-                    price: foundListing.price,
-                    location: foundListing.location,
-                    year: foundListing.year,
-                    make: foundListing.make,
-                    model: foundListing.model,
-                    mileage: foundListing.mileage,
-                    fuelType: foundListing.fuelType,
-                    transmission: foundListing.transmission,
-                    imageUrl: foundListing.imageUrl,
-                });
-            } else {
-                toast.error('Listing not found');
-                router.back();
-            }
-        } else if (isNewListing) {
-            setListing({} as CarListing);
+        if (listing !== null && listing !== undefined) {
+            setListing(listing);
+            setFormData({
+                title: data.title,
+                description: data.description,
+                price: data.price,
+                location: data.location,
+                year: data.year,
+                make: data.make,
+                model: data.model,
+                mileage: data.mileage,
+                fuelType: data.fuelType,
+                transmission: data.transmission,
+                imageUrl: data.imageUrl,
+            });
+        } else {
+            toast.error('Listing not found');
+            router.back();
         }
-    }, [id, router, isNewListing]);
+
+    }, [data, router]);
 
     const handleInputChange = (field: string, value: string | number) => {
         setFormData(prev => ({
@@ -83,9 +79,10 @@ const CarForm = () => {
             let result;
             if (isNewListing) {
                 result = dataStore.createListing(listingData, user.id, user.name);
-            } else if (id) {
-                result = dataStore.updateListing(id, listingData, user.id, user.name);
-            }
+            } else
+                if (data?.id) {
+                    result = dataStore.updateListing(data.id, listingData, user.id, user.name);
+                }
 
             if (result) {
                 toast.success(`Listing ${isNewListing ? 'created' : 'updated'} successfully!`);
