@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Car, Mail, Lock, EyeOff, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -13,19 +13,20 @@ import { Button } from '../ui/button';
 import Link from 'next/link';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const { user, login } = useAuth();
     const router = useRouter();
 
     // Redirect if already logged in
-    if (user) {
-        router.push('/dashboard');
-        return null; // Prevent rendering the login form if already logged in
-    }
+    useEffect(() => {
+        if (user) {
+            router.push('/dashboard');
+        }
+    }, [router, user])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

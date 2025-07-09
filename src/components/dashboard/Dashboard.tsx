@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import DashboardTableSkeleton from '@/components/dashboard/components/skeletons/DashboardTableSkeleton';
 import DashboardGridSkeleton from '@/components/dashboard/components/skeletons/DashboardGridSkeleton';
 import DashboardStatsSkeleton from '@/components/dashboard/components/skeletons/DashboardStatsSkeleton ';
+import { CarListing } from '../lib/dataStore';
 
 const DashboardStats = dynamic(
     () => import('@/components/dashboard/components/DashboardStats'), {
@@ -54,8 +55,8 @@ const DashboardPage = () => {
         setShowConfirmDialog(null);
     };
 
-    const handleEdit = (listingId: string) => {
-        router.push(`/edit-listing/${listingId}`);
+    const handleEdit = (car: CarListing) => {
+        router.push(`/dashboard/${car.slug}/${car.code}`);
     };
 
     return (

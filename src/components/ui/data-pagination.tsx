@@ -112,7 +112,7 @@ export function DataPagination({
 
   return (
     <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
-      <div className='text-sm text-muted-foreground'>
+      <div className='text-sm text-gray-400'>
         Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of{' '}
         <strong>{totalItems}</strong> {showingText}
       </div>
@@ -141,7 +141,7 @@ export function DataPagination({
           <Button
             variant='outline'
             size='icon'
-            className='h-8 w-8'
+            className='h-8 w-8 cursor-pointer'
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}
             aria-label='First Page'
@@ -151,7 +151,7 @@ export function DataPagination({
           <Button
             variant='outline'
             size='icon'
-            className='h-8 w-8'
+            className='h-8 w-8  cursor-pointer'
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             aria-label='Previous Page'
@@ -164,7 +164,7 @@ export function DataPagination({
           <Button
             variant='outline'
             size='icon'
-            className='h-8 w-8'
+            className='h-8 w-8  cursor-pointer'
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             aria-label='Next Page'
@@ -174,7 +174,7 @@ export function DataPagination({
           <Button
             variant='outline'
             size='icon'
-            className='h-8 w-8'
+            className='h-8 w-8  cursor-pointer'
             onClick={() => handlePageChange(totalPages)}
             disabled={currentPage === totalPages}
             aria-label='Last Page'
@@ -193,7 +193,7 @@ interface PageButtonProps {
   onClick: () => void;
 }
 
-function PageButton({ page, isActive, onClick }: PageButtonProps) {
+const PageButton = ({ page, isActive, onClick }: PageButtonProps) => {
   return (
     <Button
       variant={isActive ? 'default' : 'outline'}

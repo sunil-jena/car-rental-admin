@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React from 'react';
-import { Edit3, CheckCircle, XCircle, DollarSign, MapPin } from 'lucide-react';
+import { CheckCircle, XCircle, DollarSign, MapPin, Edit } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
@@ -22,7 +22,7 @@ const DashboardGrid = ({ listings, handleEdit, handleStatusChange, setShowConfir
                 />
                 <div className="p-4 space-y-2">
                     <p className="text-sm font-medium text-gray-900">{listing.year} {listing.make} {listing.model}</p>
-                    <p className="text-xs text-gray-500">{listing.title}</p>
+                    <p className="text-xs text-gray-400">{listing.title}</p>
                     <div className="flex items-center text-sm text-gray-600">
                         <MapPin className="h-4 w-4 mr-1" />
                         {listing.location}
@@ -31,14 +31,14 @@ const DashboardGrid = ({ listings, handleEdit, handleStatusChange, setShowConfir
                         <DollarSign className="h-4 w-4 mr-1" />
                         {listing.price}/day
                     </div>
-                    <div className="flex items-center space-x-2 pt-2">
+                    <div className="flex items-center justify-end space-x-2 pt-2">
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleEdit(listing.id)}
+                            onClick={() => handleEdit(listing)}
                             className="flex items-center gap-1"
                         >
-                            <Edit3 className="h-4 w-4" />
+                            <Edit className="h-4 w-4" />
                             {/* Edit */}
                         </Button>
                         {listing.status === 'pending' && (

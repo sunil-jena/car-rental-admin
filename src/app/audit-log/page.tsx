@@ -1,9 +1,9 @@
+import AuditLog from '@/components/audit/AuditLog'
 import React from 'react'
-import DashboardPage from '@/components/dashboard/Dashboard'
 
 const page = () => {
     return (
-        <DashboardPage />
+        <AuditLog />
     )
 }
 

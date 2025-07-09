@@ -8,9 +8,8 @@ import {
     TableHead,
     TableRow,
     TableCell,
-} from '@/components/ui/table'; // Adjust import path if different
+} from '@/components/ui/table';
 import {
-    Edit3,
     CheckCircle,
     XCircle,
     DollarSign,
@@ -19,6 +18,7 @@ import {
     User,
     Settings,
     Fuel,
+    Edit,
 } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,7 @@ const DashboardTable = ({
     handleStatusChange,
     setShowConfirmDialog,
 }: any) => {
+
     const getStatusBadge = (status: string) => {
         const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';
         switch (status) {
@@ -94,7 +95,7 @@ const DashboardTable = ({
                                         <p className="text-sm font-medium text-gray-900">
                                             {listing.year} {listing.make} {listing.model}
                                         </p>
-                                        <p className="text-xs text-gray-500">{listing.title}</p>
+                                        <p className="text-xs text-gray-400">{listing.title}</p>
                                     </div>
                                 </div>
                             </TableCell>
@@ -119,7 +120,7 @@ const DashboardTable = ({
                             </TableCell>
 
                             <TableCell className="text-sm text-gray-600">
-                                <div className="flex items-center">
+                                <div className="flex items-center line-clamp-1 truncate">
                                     <MapPin className="h-4 w-4 mr-1" />
                                     {listing.location}
                                 </div>
@@ -143,10 +144,10 @@ const DashboardTable = ({
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => handleEdit(listing.id)}
+                                        onClick={() => handleEdit(listing)}
                                         className="flex items-center gap-1"
                                     >
-                                        <Edit3 className="h-4 w-4" />
+                                        <Edit className="h-4 w-4" />
                                         {/* Edit */}
                                     </Button>
                                     {listing.status === 'pending' && (
@@ -154,7 +155,7 @@ const DashboardTable = ({
                                             <Button
                                                 size="sm"
                                                 onClick={() => handleStatusChange(listing.id, 'approved')}
-                                                className="p-1 text-green-600 hover:text-green-800 hover:bg-green-50 rounded"
+                                                className="p-1 bg-green-500 text-green-600 hover:text-green-800 hover:bg-green-50 rounded"
                                                 title="Approve"
                                             >
                                                 <CheckCircle className="h-4 w-4" />

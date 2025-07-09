@@ -14,30 +14,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const { user, logout } = useAuth();
     const router = useRouter();
 
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     const handleLogout = () => {
         logout();
-        router.push("/login");
+        router.replace("/");
         setShowLogoutConfirm(false);
     };
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Sidebar user={user} setShowLogoutConfirm={setShowLogoutConfirm} />
+            <Sidebar
+                user={user}
+                setShowLogoutConfirm={setShowLogoutConfirm}
+                sidebarOpen={sidebarOpen}
+                toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+            />
 
-            <div className={`lg:ml-64 transition-all duration-300 ${sidebarOpen ? "ml-64" : "ml-0"}`}>
+            <div className={`lg:ml-64 transition-all duration-300`}>
                 <Header user={user} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
                 <main className="p-6">{children}</main>
             </div>
-
-            {sidebarOpen && (
-                <div
-                    className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
-                    onClick={() => setSidebarOpen(false)}
-                />
-            )}
 
             <LogoutDialog
                 show={showLogoutConfirm}

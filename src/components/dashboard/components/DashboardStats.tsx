@@ -23,10 +23,8 @@ const DashboardStats = ({ filteredListings }: any) => {
 
 const StatCard = ({ title, value, icon }: any) => (
     <div className="bg-white p-4 rounded shadow border flex justify-between items-center">
-        <div>
-            <p className="text-sm text-gray-600">{title}</p>
-            <p className="text-xl font-bold">{value}</p>
-        </div>
+        <p className="text-sm text-gray-600">{title}</p>
+        <p className="text-xl font-bold">{value}</p>
         <div className="text-gray-400">{icon}</div>
     </div>
 );

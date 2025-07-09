@@ -19,7 +19,7 @@ const Button = ({
         'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer';
 
     const variantClasses = {
-        default: 'bg-blue-600 text-white hover:bg-blue-700',
+        default: 'bg-black text-white hover:bg-black/70',
         destructive: 'bg-red-600 text-white hover:bg-red-700',
         outline: 'border border-gray-300 bg-white hover:bg-gray-100',
         secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',

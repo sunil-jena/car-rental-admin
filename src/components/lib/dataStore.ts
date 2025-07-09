@@ -1,6 +1,8 @@
 export interface CarListing {
     id: string;
     title: string;
+    slug?: string;
+    code?: string;
     description: string;
     price: number;
     location: string;
@@ -32,6 +34,8 @@ const listings: CarListing[] = [
     {
         id: '1',
         title: '2020 Toyota Camry - Perfect for City Trips',
+        slug: '2020-toyota-cmry',
+        code: 'TCAMRY20',
         description: 'Clean, reliable sedan with excellent fuel economy. Perfect for business trips or weekend getaways.',
         price: 89,
         location: 'Los Angeles, CA',
@@ -50,6 +54,8 @@ const listings: CarListing[] = [
     {
         id: '2',
         title: '2019 BMW X5 - Luxury SUV Experience',
+        slug: '2019-bmw-x5',
+        code: 'BMWX519',
         description: 'Premium SUV with all the latest features. Spacious interior, advanced safety features, and powerful performance.',
         price: 150,
         location: 'Miami, FL',
@@ -68,6 +74,8 @@ const listings: CarListing[] = [
     {
         id: '3',
         title: '2021 Tesla Model 3 - Electric & Efficient',
+        slug: '2021-tesla-model-3',
+        code: 'TESLA21',
         description: 'Latest electric vehicle with autopilot features. Zero emissions, cutting-edge technology, and exceptional range.',
         price: 120,
         location: 'San Francisco, CA',
@@ -86,6 +94,8 @@ const listings: CarListing[] = [
     {
         id: '4',
         title: '2018 Ford Mustang - Sports Car Thrill',
+        slug: '2018-ford-mustang',
+        code: 'FRDMST18',
         description: 'Classic American muscle car with modern performance. Perfect for weekend adventures and special occasions.',
         price: 110,
         location: 'Austin, TX',
@@ -104,6 +114,8 @@ const listings: CarListing[] = [
     {
         id: '5',
         title: '2022 Honda CR-V - Family SUV',
+        slug: '2022-honda-cr-v',
+        code: 'HNDCVR22',
         description: 'Reliable family SUV with excellent safety ratings. Spacious cargo area and comfortable seating for 5.',
         price: 95,
         location: 'Chicago, IL',
@@ -122,6 +134,8 @@ const listings: CarListing[] = [
     {
         id: '6',
         title: '2020 Audi A4 - Premium Sedan',
+        slug: '2020-audi-a4',
+        code: 'AUDIA420',
         description: 'Luxury sedan with advanced technology and comfort features. Perfect for executive travel.',
         price: 135,
         location: 'New York, NY',
@@ -140,6 +154,8 @@ const listings: CarListing[] = [
     {
         id: '7',
         title: '2019 Jeep Wrangler - Off-Road Adventure',
+        slug: '2019-jeep-wrangler',
+        code: "JWRNGLR19",
         description: 'Rugged 4x4 SUV perfect for outdoor adventures and off-road exploration.',
         price: 105,
         location: 'Denver, CO',
@@ -158,6 +174,8 @@ const listings: CarListing[] = [
     {
         id: '8',
         title: '2021 Mercedes-Benz C-Class - Executive Choice',
+        slug: '2021-mercedes-benz-c-class',
+        code: "MRCBZC21",
         description: 'Elegant luxury sedan with premium interior and advanced safety features.',
         price: 140,
         location: 'Seattle, WA',
@@ -176,6 +194,8 @@ const listings: CarListing[] = [
     {
         id: '9',
         title: '2020 Subaru Outback - All-Weather Reliable',
+        slug: '2020-subaru-outback',
+        code: 'SUBOUT20',
         description: 'All-wheel drive wagon perfect for all weather conditions and outdoor activities.',
         price: 85,
         location: 'Portland, OR',
@@ -194,6 +214,8 @@ const listings: CarListing[] = [
     {
         id: '10',
         title: '2018 Nissan Altima - Economy Choice',
+        slug: '2018-nissan-altima',
+        code: 'NISSAM18',
         description: 'Fuel-efficient sedan with modern features. Great value for money.',
         price: 75,
         location: 'Phoenix, AZ',
@@ -212,6 +234,8 @@ const listings: CarListing[] = [
     {
         id: '11',
         title: '2021 Chevrolet Tahoe - Large Family SUV',
+        slug: '2021-chevrolet-tahoe',
+        code: 'CHVRLTT21',
         description: 'Spacious 8-seater SUV perfect for large families and group trips.',
         price: 160,
         location: 'Dallas, TX',
@@ -230,6 +254,8 @@ const listings: CarListing[] = [
     {
         id: '12',
         title: '2020 Volkswagen Jetta - Compact Sedan',
+        slug: '2020-volkswagen-jetta',
+        code: "VLKSWNJ20",
         description: 'Efficient compact sedan with European engineering and modern tech.',
         price: 80,
         location: 'Boston, MA',
@@ -387,7 +413,30 @@ export const dataStore = {
         }
         return null;
     },
+    createListing: (listingData: Omit<CarListing, 'id' | 'submittedAt' | 'lastModified'>, userId: string, userName: string) => {
+        const newListing: CarListing = {
+            ...listingData,
+            id: Date.now().toString(),
+            submittedAt: new Date().toISOString(),
+            lastModified: new Date().toISOString(),
+            status: 'pending'
+        };
 
+        listings.unshift(newListing);
+
+        // Add to audit log
+        auditLog.unshift({
+            id: Date.now().toString(),
+            listingId: newListing.id,
+            adminId: userId,
+            adminName: userName,
+            action: 'create',
+            details: `New listing created: ${newListing.make} ${newListing.model}`,
+            timestamp: new Date().toISOString()
+        });
+
+        return newListing;
+    },
     updateListing: (id: string, updates: Partial<CarListing>, adminId: string, adminName: string) => {
         const listingIndex = listings.findIndex(listing => listing.id === id);
         if (listingIndex !== -1) {

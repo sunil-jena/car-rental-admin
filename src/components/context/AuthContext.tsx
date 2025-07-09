@@ -1,5 +1,6 @@
-'use client';
+'use client'
 import React, { createContext, useContext, useState, useEffect } from 'react';
+
 interface User {
     id: string;
     email: string;
@@ -15,6 +16,31 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Multiple admin users
+const adminUsers = [
+    {
+        id: '1',
+        email: 'admin@carrentals.com',
+        name: 'John Smith',
+        role: 'admin',
+        password: 'admin123'
+    },
+    {
+        id: '2',
+        email: 'manager@carrentals.com',
+        name: 'Sarah Johnson',
+        role: 'admin',
+        password: 'manager123'
+    },
+    {
+        id: '3',
+        email: 'supervisor@carrentals.com',
+        name: 'Mike Wilson',
+        role: 'admin',
+        password: 'supervisor123'
+    }
+];
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
@@ -40,13 +66,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const login = async (email: string, password: string): Promise<boolean> => {
         setIsLoading(true);
 
-        // Mock authentication - in real app, this would be an API call
-        if (email === 'admin@carrentals.com' && password === 'admin123') {
+        // Find admin user by email and password
+        const adminUser = adminUsers.find(admin =>
+            admin.email === email && admin.password === password
+        );
+
+        if (adminUser) {
             const user = {
-                id: '1',
-                email: 'admin@carrentals.com',
-                name: 'Admin User',
-                role: 'admin'
+                id: adminUser.id,
+                email: adminUser.email,
+                name: adminUser.name,
+                role: adminUser.role
             };
             setUser(user);
             localStorage.setItem('admin_user', JSON.stringify(user));
