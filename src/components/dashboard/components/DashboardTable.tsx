@@ -8,7 +8,7 @@ import {
     TableHead,
     TableRow,
 } from '@/components/ui/table';
-import DashboardTableRow from './DashboardTableRow';
+import DashboardTableRow from '@/components/dashboard/components/DashboardTableRow';
 
 const DashboardTable = ({
     listings,

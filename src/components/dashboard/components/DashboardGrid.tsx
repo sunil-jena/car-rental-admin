@@ -39,18 +39,16 @@ const DashboardGrid = ({ listings, handleEdit, handleStatusChange, setShowConfir
                             className="flex items-center gap-1"
                         >
                             <Edit className="h-4 w-4" />
-                            {/* Edit */}
                         </Button>
                         {listing.status === 'pending' && (
                             <>
                                 <Button
                                     size="sm"
                                     onClick={() => handleStatusChange(listing.id, 'approved')}
-                                    className="p-1 text-green-600 hover:text-green-800 hover:bg-green-50 rounded"
+                                    className="p-1 bg-green-500 text-green-600 hover:text-green-800 hover:bg-green-50 rounded"
                                     title="Approve"
                                 >
                                     <CheckCircle className="h-4 w-4" />
-                                    {/* Approve */}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -59,7 +57,6 @@ const DashboardGrid = ({ listings, handleEdit, handleStatusChange, setShowConfir
                                     title="Reject"
                                 >
                                     <XCircle className="h-4 w-4" />
-                                    {/* Reject */}
                                 </Button>
                             </>
                         )}

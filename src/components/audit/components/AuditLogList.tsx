@@ -51,7 +51,7 @@ const AuditLogList: React.FC<Props> = ({ entries }) => {
                         >
                             <div className="flex-shrink-0 mt-1">{getActionIcon(entry.action)}</div>
                             <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-wrap md:flex-nowrap items-center justify-between">
                                     <div className="flex items-center space-x-2">
                                         <p className="text-sm font-medium text-gray-900">{entry.admin.name}</p>
                                         {getActionBadge(entry.action)}
@@ -59,7 +59,7 @@ const AuditLogList: React.FC<Props> = ({ entries }) => {
                                     <p className="text-xs text-gray-500">{new Date(entry.timestamp).toLocaleString()}</p>
                                 </div>
                                 <p className="text-sm text-gray-600 mt-1">{entry.details}</p>
-                                <p className="text-xs text-gray-500 mt-1">Listing ID: {entry.listingId}</p>
+                                <p className="text-xs text-gray-500 mt-1 ">Listing ID: {entry.listingId}</p>
                             </div>
                         </div>
                     ))}

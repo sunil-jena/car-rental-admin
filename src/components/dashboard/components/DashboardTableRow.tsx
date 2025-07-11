@@ -58,7 +58,7 @@ const DashboardTableRow = ({
                         <p className="text-sm font-medium text-gray-900 truncate">
                             {listing.year} {listing.make} {listing.model}
                         </p>
-                        <p className="text-xs text-gray-400 truncate">{listing.title}</p>
+                        <p className="text-xs text-gray-400 ">{listing.title}</p>
                     </div>
                 </div>
             </TableCell>
