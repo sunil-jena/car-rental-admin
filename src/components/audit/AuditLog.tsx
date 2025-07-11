@@ -26,7 +26,7 @@ const AuditLog = ({ auditEntries, total, page, limit, statusData, pageSizeOption
   };
 
   const handlePageSizeChange = (newLimit: number) => {
-    router.push(`/audit?page=${page}&limit=${newLimit}`);
+    router.push(`/audit?page=1&limit=${newLimit}`);
   };
 
   return (

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Layout from '@/components/layout/Layout';
 import DashboardFilters from '@/components/dashboard/components/DashboardFilters';
@@ -47,28 +47,34 @@ const DashboardPage = ({
     pageSizeOptions,
 }: any) => {
     const { showError, showSuccess } = useFeedback()
-    const [listings, setListings] = useState(() =>
-        initialListings.reduce((acc: any, item: any) => {
-            acc[item.id] = item;
-            return acc;
-        }, {})
-    );
+    const [listings, setListings] = useState([]);
+
     const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
     const [showFilters, setShowFilters] = useState(false);
     const [showConfirmDialog, setShowConfirmDialog] = useState<string | null>(null);
 
     const router = useRouter();
 
+    useEffect(() => {
+        // Update listings state when initialListings prop changes
+        setListings(
+            initialListings.reduce((acc: any, item: any) => {
+                acc[item.id] = item;
+                return acc;
+            }, {})
+        );
+    }, [initialListings]);
+
     const handlePageChange = (newPage: number) => {
         router.push(`/dashboard?page=${newPage}&limit=${limit}&status=${currentStatus}`);
     };
 
     const handlePageSizeChange = (newLimit: number) => {
-        router.push(`/dashboard?page=${page}&limit=${newLimit}&status=${currentStatus}`);
+        router.push(`/dashboard?page=1&limit=${newLimit}&status=${currentStatus}`);
     };
 
     const handleFilterChange = (newStatus: string) => {
-        router.push(`/dashboard?page=${page}&limit=${limit}&status=${newStatus}`);
+        router.push(`/dashboard?page=1&limit=${limit}&status=${newStatus}`);
     };
 
     const handleStatusChange = async (id: string, status: 'approved' | 'rejected') => {
@@ -137,7 +143,7 @@ const DashboardPage = ({
                             />
                         ) : (
                             <DashboardGrid
-                                listings={listings}
+                                listings={Object.values(listings)}
                                 handleEdit={handleEdit}
                                 handleStatusChange={handleStatusChange}
                                 setShowConfirmDialog={setShowConfirmDialog}
