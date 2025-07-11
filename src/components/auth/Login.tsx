@@ -2,7 +2,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Car, Mail, Lock, EyeOff, Eye } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -61,10 +60,7 @@ const Login = () => {
     return (
         <div className='flex items-center justify-center bg-gray-50 p-4'>
             <div className="flex items-center justify-center">
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                <div
                     className='w-full max-w-md space-y-6'
                 >
                     <Card className="shadow-xl">
@@ -148,7 +144,7 @@ const Login = () => {
                         <p className="text-xs text-blue-600">Email: admin@carrentals.com</p>
                         <p className="text-xs text-blue-600">Password: admin123</p>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </div>
     );
