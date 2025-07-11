@@ -253,8 +253,13 @@ async function main() {
         }
     ];
 
-    await prisma.carListing.createMany({ data: carListingsData });
-
+    for (const listing of carListingsData) {
+        await prisma.carListing.upsert({
+            where: { code: listing.code },
+            update: listing,
+            create: listing,
+        });
+    }
     const listings = await prisma.carListing.findMany();
 
     // 3. Insert audit logs using inserted IDs
