@@ -5,13 +5,19 @@ const prisma = new PrismaClient();
 
 async function main() {
     // 1. Insert admin users
-    await prisma.adminUser.createMany({
-        data: [
-            { email: 'admin@carrentals.com', name: 'John Smith', role: 'admin', password: 'admin123' },
-            { email: 'manager@carrentals.com', name: 'Sarah Johnson', role: 'admin', password: 'manager123' },
-            { email: 'supervisor@carrentals.com', name: 'Mike Wilson', role: 'admin', password: 'supervisor123' },
-        ],
-    });
+    const adminUsersData = [
+        { email: 'admin@carrentals.com', name: 'John Smith', role: 'admin', password: 'admin123' },
+        { email: 'manager@carrentals.com', name: 'Sarah Johnson', role: 'admin', password: 'manager123' },
+        { email: 'supervisor@carrentals.com', name: 'Mike Wilson', role: 'admin', password: 'supervisor123' },
+    ];
+
+    for (const admin of adminUsersData) {
+        await prisma.adminUser.upsert({
+            where: { email: admin.email },
+            update: admin,
+            create: admin,
+        });
+    }
 
 
     const admins = await prisma.adminUser.findMany();
@@ -248,8 +254,13 @@ async function main() {
         }
     ];
 
-    await prisma.carListing.createMany({ data: carListingsData });
-
+    for (const listing of carListingsData) {
+        await prisma.carListing.upsert({
+            where: { code: listing.code },
+            update: listing,
+            create: listing,
+        });
+    }
     const listings = await prisma.carListing.findMany();
 
     // 3. Insert audit logs using inserted IDs
