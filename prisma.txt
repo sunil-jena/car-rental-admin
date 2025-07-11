@@ -1,0 +1,14 @@
+# Install Prisma CLI as a dev dependency
+npm install prisma --save-dev
+
+# Install Prisma Client to interact with the database
+npm install @prisma/client
+
+# Generate the Prisma Client based on your schema.prisma models
+npx prisma generate
+
+# Run your seed.ts file to insert initial data into the database
+npx tsx prisma/seed.ts
+
+# Open Prisma Studio to view and manage your database visually
+npx prisma studio

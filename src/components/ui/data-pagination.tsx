@@ -120,7 +120,7 @@ export function DataPagination({
       <div className='flex flex-wrap justify-center items-center gap-2'>
         <div className='flex items-center'>
           <Select
-            value={pageSize.toString()}
+            value={pageSize?.toString()}
             onValueChange={(value) => onPageSizeChange(parseInt(value))}
           >
             <SelectTrigger className='h-8 w-[70px]'>
@@ -128,7 +128,7 @@ export function DataPagination({
             </SelectTrigger>
             <SelectContent>
               {pageSizeOptions.map((size) => (
-                <SelectItem key={size} value={size.toString()}>
+                <SelectItem key={size} value={size?.toString()}>
                   {size}
                 </SelectItem>
               ))}

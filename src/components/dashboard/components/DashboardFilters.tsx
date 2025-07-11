@@ -23,7 +23,7 @@ const DashboardFilters = ({
             <div className="w-48">
                 <Select
                     value={filters.status}
-                    onValueChange={(value) => updateFilter('status', value)}
+                    onValueChange={(value) => updateFilter(value)}
                 >
                     <SelectTrigger>
                         <SelectValue placeholder="Select status" />

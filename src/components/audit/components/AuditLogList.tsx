@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React from 'react';
 import { FileText, CheckCircle, XCircle, Edit3 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AuditLogEntry } from '@/components/lib/dataStore';
 
 interface Props {
-    entries: AuditLogEntry[];
+    entries: any[];
 }
 
 const AuditLogList: React.FC<Props> = ({ entries }) => {
@@ -44,7 +44,7 @@ const AuditLogList: React.FC<Props> = ({ entries }) => {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {entries.map(entry => (
+                    {entries?.map(entry => (
                         <div
                             key={entry.id}
                             className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -53,7 +53,7 @@ const AuditLogList: React.FC<Props> = ({ entries }) => {
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-2">
-                                        <p className="text-sm font-medium text-gray-900">{entry.adminName}</p>
+                                        <p className="text-sm font-medium text-gray-900">{entry.admin.name}</p>
                                         {getActionBadge(entry.action)}
                                     </div>
                                     <p className="text-xs text-gray-500">{new Date(entry.timestamp).toLocaleString()}</p>
@@ -64,7 +64,7 @@ const AuditLogList: React.FC<Props> = ({ entries }) => {
                         </div>
                     ))}
 
-                    {entries.length === 0 && (
+                    {entries?.length === 0 && (
                         <div className="text-center py-8">
                             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-500">No audit entries found.</p>

@@ -4,14 +4,7 @@ import React from 'react';
 import { Car, CheckCircle, XCircle, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const DashboardStats = ({ filteredListings }: any) => {
-    const statusCounts = {
-        total: filteredListings.length,
-        pending: filteredListings.filter((l: any) => l.status === 'pending').length,
-        approved: filteredListings.filter((l: any) => l.status === 'approved').length,
-        rejected: filteredListings.filter((l: any) => l.status === 'rejected').length,
-    };
-
+const DashboardStats = ({ statusCounts }: any) => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 px-4">
             <Card>

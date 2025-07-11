@@ -11,14 +11,25 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const router = useRouter();
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async () => {
+        const res = await fetch("/api/logout", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (res.ok) {
+            router.push("/");
+            
+        } else {
+            console.error("Logout failed");
+        }
         router.replace("/");
         setShowLogoutConfirm(false);
     };

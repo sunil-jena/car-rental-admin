@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Layout from '@/components/layout/Layout';
-import { toast } from 'sonner';
 import DashboardFilters from '@/components/dashboard/components/DashboardFilters';
 import DashboardConfirmDialog from '@/components/dashboard/components/DashboardConfirmDialog';
-import { useCarListing } from '@/components/context/CarListingContext';
 import dynamic from 'next/dynamic';
 import DashboardTableSkeleton from '@/components/dashboard/components/skeletons/DashboardTableSkeleton';
 import DashboardGridSkeleton from '@/components/dashboard/components/skeletons/DashboardGridSkeleton';
-import { CarListing } from '@/components/lib/dataStore';
 import { DataPagination } from '@/components/ui/data-pagination';
-import DashboardStatsSkeleton from '@/components/dashboard/components/skeletons/DashboardStatsSkeleton ';
+import DashboardStatsSkeleton from '@/components/dashboard/components/skeletons/DashboardStatsSkeleton';
+import { useFeedback } from '../context/FeedbackContext';
 
 const DashboardStats = dynamic(
     () => import('@/components/dashboard/components/DashboardStats'),
@@ -38,46 +37,71 @@ const DashboardGrid = dynamic(
     }
 );
 
-const DashboardPage = () => {
-    const {
-        filteredListings,
-        totalPages,
-        total,
-        filters,
-        currentPage,
-        itemsPerPage,
-        pageSizeOptions,
-        loading,
-        updateFilter,
-        setCurrentPage,
-        setItemsPerPage,
-        resetFilters,
-        approveListingContext,
-        rejectListingContext,
-    } = useCarListing();
-
-    const [showConfirmDialog, setShowConfirmDialog] = useState<string | null>(null);
+const DashboardPage = ({
+    listings: initialListings,
+    total,
+    page,
+    limit,
+    statusData,
+    currentStatus,
+    pageSizeOptions,
+}: any) => {
+    const { showError, showSuccess } = useFeedback()
+    const [listings, setListings] = useState(() =>
+        initialListings.reduce((acc: any, item: any) => {
+            acc[item.id] = item;
+            return acc;
+        }, {})
+    );
     const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
     const [showFilters, setShowFilters] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState<string | null>(null);
+
     const router = useRouter();
 
-    const handleStatusChange = async (listingId: string, newStatus: 'approved' | 'rejected') => {
-        try {
-            if (newStatus === 'approved') {
-                approveListingContext(listingId);
-                toast.success('Listing approved successfully!');
-            } else {
-                rejectListingContext(listingId);
-                toast.error('Listing rejected successfully!');
-            }
-        } catch (error) {
-            toast.error('Failed to update listing status.');
-        }
-        setShowConfirmDialog(null);
+    const handlePageChange = (newPage: number) => {
+        router.push(`/dashboard?page=${newPage}&limit=${limit}&status=${currentStatus}`);
     };
 
-    const handleEdit = (car: CarListing) => {
-        router.push(`/dashboard/${car.slug}/${car.code}`);
+    const handlePageSizeChange = (newLimit: number) => {
+        router.push(`/dashboard?page=${page}&limit=${newLimit}&status=${currentStatus}`);
+    };
+
+    const handleFilterChange = (newStatus: string) => {
+        router.push(`/dashboard?page=${page}&limit=${limit}&status=${newStatus}`);
+    };
+
+    const handleStatusChange = async (id: string, status: 'approved' | 'rejected') => {
+        try {
+            const res = await fetch("/api/car/status", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, status }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setListings((prev: any) => ({
+                    ...prev,
+                    [data.car.id]: { ...data.car, status }
+                }));
+
+                showSuccess(`Car status updated to ${status} successfully.`);
+            } else {
+                showError(data.error || 'Failed to update car status.');
+            }
+        } catch (error) {
+            console.error(error);
+            showError('Failed to update car status.');
+        } finally {
+            setShowConfirmDialog(null);
+        }
+    };
+
+
+    const handleEdit = (listing: any) => {
+        router.push(`/dashboard/${listing.slug}/${listing.code}`);
     };
 
     return (
@@ -87,34 +111,33 @@ const DashboardPage = () => {
                     <h1 className="text-3xl font-bold">Dashboard</h1>
                     <p className="text-gray-600">Manage car rental listings and review submissions</p>
                 </div>
-                <DashboardStats filteredListings={filteredListings} />
+
+                <DashboardStats statusCounts={statusData} />
 
                 <DashboardFilters
-                    filters={filters}
-                    updateFilter={updateFilter}
-                    resetFilters={resetFilters}
+                    filters={{ status: currentStatus }}
+                    updateFilter={(value: any) => handleFilterChange(value)}
+                    resetFilters={() => handleFilterChange('all')}
                     showFilters={showFilters}
                     setShowFilters={setShowFilters}
                     viewMode={viewMode}
                     setViewMode={setViewMode}
                 />
 
-                {loading ? (
-                    <div className="flex justify-center items-center h-32">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black" />
-                    </div>
+                {listings?.length === 0 ? (
+                    <div className="text-center py-10">No listings found.</div>
                 ) : (
                     <>
                         {viewMode === 'table' ? (
                             <DashboardTable
-                                listings={filteredListings}
+                                listings={Object.values(listings)}
                                 handleEdit={handleEdit}
                                 handleStatusChange={handleStatusChange}
                                 setShowConfirmDialog={setShowConfirmDialog}
                             />
                         ) : (
                             <DashboardGrid
-                                listings={filteredListings}
+                                listings={listings}
                                 handleEdit={handleEdit}
                                 handleStatusChange={handleStatusChange}
                                 setShowConfirmDialog={setShowConfirmDialog}
@@ -123,14 +146,11 @@ const DashboardPage = () => {
 
                         <div className="mt-4">
                             <DataPagination
-                                currentPage={currentPage}
+                                currentPage={page}
                                 totalItems={total}
-                                pageSize={itemsPerPage}
-                                onPageChange={setCurrentPage}
-                                onPageSizeChange={(size) => {
-                                    setItemsPerPage(size);
-                                    setCurrentPage(1);
-                                }}
+                                pageSize={limit}
+                                onPageChange={handlePageChange}
+                                onPageSizeChange={handlePageSizeChange}
                                 pageSizeOptions={pageSizeOptions}
                                 showingText="cars"
                             />

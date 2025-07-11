@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Car, LayoutDashboard, FileText, LogOut, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface User {
     id: string;
@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, setShowLogoutConfirm, sidebarOp
 
     const navigation = [
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-        { name: "Audit Log", href: "/audit-log", icon: FileText },
+        { name: "Audit Log", href: "/audit", icon: FileText },
     ];
 
     return (
@@ -84,7 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({ user, setShowLogoutConfirm, sidebarOp
                             </div>
                             <button
                                 onClick={() => setShowLogoutConfirm(true)}
-                                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded"
+                                title="logout"
+                                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded cursor-pointer"
                             >
                                 <LogOut className="h-4 w-4" />
                             </button>

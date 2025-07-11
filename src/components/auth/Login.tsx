@@ -3,57 +3,63 @@
 import React, { useEffect, useState } from 'react';
 import { Car, Mail, Lock, EyeOff, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-// import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import { signIn, useSession } from 'next-auth/react';
+import { useFeedback } from '../context/FeedbackContext';
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
-
-    const { user, login } = useAuth();
     const router = useRouter();
+
+    const { data: session, status } = useSession();
+    const { showError, showSuccess } = useFeedback()
 
     // Redirect if already logged in
     useEffect(() => {
-        if (user) {
+        if (status === "loading") return;
+
+        if (session) {
             router.push('/dashboard');
         }
-    }, [router, user])
+    }, [router, session, status]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
         try {
-            const success = await login(email, password);
-
-            if (success) {
-                toast.success('Login successful! Welcome to the admin panel.');
+            const res = await signIn('credentials', {
+                redirect: false,
+                email,
+                password,
+            });
+            if (res?.ok) {
+                showSuccess('Login successful! Welcome to the admin panel.');
                 router.push('/dashboard');
             } else {
-                toast.error('Invalid credentials. Please try again.');
+               showError(res?.error || 'Invalid credentials.');
             }
         } catch (error: any) {
-            toast.error(error.message || 'An error occurred during login. Please try again.');
+            showError(error.message || 'An error occurred during login.');
         } finally {
             setIsLoading(false);
         }
     };
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     return (
-        <div className='min-h-screen flex items-center justify-center bg-gray-50 p-4'>
+        <div className='flex items-center justify-center bg-gray-50 p-4'>
             <div className="flex items-center justify-center">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
@@ -136,7 +142,7 @@ const Login = () => {
                         </CardContent>
                         <CardFooter className="text-center text-sm">
                             <div className="mx-auto">
-                                Don't have an account?{" "}
+                                Don&apos;t have an account?{" "}
                                 <Link href="/signup" className="font-medium text-balck">
                                     Sign up
                                 </Link>
