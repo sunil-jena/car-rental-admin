@@ -5,6 +5,7 @@ import DashboardPage from '@/components/dashboard/Dashboard';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { CarListing } from '@/components/types/type';
+import Head from 'next/head';
 
 export default function Dashboard({
     listings,
@@ -24,15 +25,27 @@ export default function Dashboard({
     pageSizeOptions: number[]
 }) {
     return (
-        <DashboardPage
-            listings={listings}
-            total={total}
-            page={page}
-            limit={limit}
-            statusData={statusData}
-            currentStatus={currentStatus}
-            pageSizeOptions={pageSizeOptions}
-        />
+        <>
+            <Head>
+                <title>Dashboard | Car Rental</title>
+                <meta
+                    name="description"
+                    content="Admin dashboard to manage car rental listings. View, approve, reject, or edit user-submitted listings efficiently."
+                />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta charSet="utf-8" />
+            </Head>
+
+            <DashboardPage
+                listings={listings}
+                total={total}
+                page={page}
+                limit={limit}
+                statusData={statusData}
+                currentStatus={currentStatus}
+                pageSizeOptions={pageSizeOptions}
+            />
+        </>
     );
 }
 

@@ -4,18 +4,31 @@ import { GetServerSideProps } from 'next';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import Head from 'next/head';
 
 export default function AuditLogPage({ auditEntries, total, page, limit, totalPages, statusData, pageSizeOptions }: any) {
     return (
-        <AuditLog
-            auditEntries={auditEntries}
-            total={total}
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            statusData={statusData}
-            pageSizeOptions={pageSizeOptions}
-        />
+        <>
+            <Head>
+                <title>Audit Logs | Car Rental</title>
+                <meta
+                    name="description"
+                    content="View all audit logs and admin activities for the car rental management dashboard."
+                />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta charSet="utf-8" />
+            </Head>
+
+            <AuditLog
+                auditEntries={auditEntries}
+                total={total}
+                page={page}
+                limit={limit}
+                totalPages={totalPages}
+                statusData={statusData}
+                pageSizeOptions={pageSizeOptions}
+            />
+        </>
     );
 }
 

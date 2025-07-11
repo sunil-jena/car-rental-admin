@@ -4,13 +4,26 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { prisma } from "@/lib/prisma";
 import EditCar from "@/components/cars/EditCar";
 import { CarListing } from "@/components/types/type";
+import Head from "next/head";
 
 interface PageProps {
     car: CarListing;
 }
 
 export default function CarDetailsPage({ car }: PageProps) {
-    return <EditCar car={car} />;
+    return <>
+        <Head>
+            <title>Edit {car.make} {car.model} | Car Rental</title>
+            <meta
+                name="description"
+                content={`Edit details for ${car.year} ${car.make} ${car.model} in the car rental admin dashboard.`}
+            />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta charSet="utf-8" />
+        </Head>
+
+        <EditCar car={car} />
+    </>;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
