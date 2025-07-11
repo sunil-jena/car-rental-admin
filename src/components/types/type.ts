@@ -1,3 +1,12 @@
+
+export interface User {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+}
+
+
 export interface CarListing {
     id: string;
     title: string;
@@ -29,8 +38,9 @@ export interface AuditLogEntry {
     timestamp: string;
 }
 
-// Mock data with more entries
-const listings: CarListing[] = [
+
+//mock data 
+export const listings: CarListing[] = [
     {
         id: '1',
         title: '2020 Toyota Camry - Perfect for City Trips',
@@ -273,7 +283,7 @@ const listings: CarListing[] = [
     }
 ];
 
-const auditLog: AuditLogEntry[] = [
+export const auditLog: AuditLogEntry[] = [
     {
         id: '1',
         listingId: '2',
@@ -365,117 +375,3 @@ const auditLog: AuditLogEntry[] = [
         timestamp: '2024-01-05T11:30:00Z'
     }
 ];
-
-export const dataStore = {
-    // Listings methods
-    getListings: (page: number = 1, limit: number = 10, status?: string) => {
-        let filteredListings = listings;
-
-        if (status && status !== 'all') {
-            filteredListings = listings.filter(listing => listing.status === status);
-        }
-
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
-        const paginatedListings = filteredListings.slice(startIndex, endIndex);
-
-        return {
-            listings: paginatedListings,
-            total: filteredListings.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredListings.length / limit)
-        };
-    },
-
-    getListing: (code: string) => {
-        return listings.find(listing => listing.code === code);
-    },
-
-    updateListingStatus: (id: string, status: 'approved' | 'rejected', adminId: string, adminName: string) => {
-        const listingIndex = listings.findIndex(listing => listing.id === id);
-        if (listingIndex !== -1) {
-            listings[listingIndex].status = status;
-            listings[listingIndex].lastModified = new Date().toISOString();
-
-            // Add to audit log
-            auditLog.unshift({
-                id: Date.now().toString(),
-                listingId: id,
-                adminId,
-                adminName,
-                action: status,
-                details: `Listing ${status} by admin - ${listings[listingIndex].make} ${listings[listingIndex].model}`,
-                timestamp: new Date().toISOString()
-            });
-
-            return listings[listingIndex];
-        }
-        return null;
-    },
-
-    createListing: (listingData: Omit<CarListing, 'id' | 'submittedAt' | 'lastModified'>, userId: string, userName: string) => {
-        const newListing: CarListing = {
-            ...listingData,
-            id: Date.now().toString(),
-            submittedAt: new Date().toISOString(),
-            lastModified: new Date().toISOString(),
-            status: 'pending'
-        };
-
-        listings.unshift(newListing);
-
-        // Add to audit log
-        auditLog.unshift({
-            id: Date.now().toString(),
-            listingId: newListing.id,
-            adminId: userId,
-            adminName: userName,
-            action: 'create',
-            details: `New listing created: ${newListing.make} ${newListing.model}`,
-            timestamp: new Date().toISOString()
-        });
-
-        return newListing;
-    },
-
-    updateListing: (id: string, updates: Partial<CarListing>, adminId: string, adminName: string) => {
-        const listingIndex = listings.findIndex(listing => listing.id === id);
-        if (listingIndex !== -1) {
-            listings[listingIndex] = {
-                ...listings[listingIndex],
-                ...updates,
-                lastModified: new Date().toISOString()
-            };
-
-            // Add to audit log
-            auditLog.unshift({
-                id: Date.now().toString(),
-                listingId: id,
-                adminId,
-                adminName,
-                action: 'edited',
-                details: `Listing details updated: ${Object.keys(updates).join(', ')} - ${listings[listingIndex].make} ${listings[listingIndex].model}`,
-                timestamp: new Date().toISOString()
-            });
-
-            return listings[listingIndex];
-        }
-        return null;
-    },
-
-    // Audit log methods
-    getAuditLog: (page: number = 1, limit: number = 20) => {
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
-        const paginatedLog = auditLog.slice(startIndex, endIndex);
-
-        return {
-            logs: paginatedLog,
-            total: auditLog.length,
-            page,
-            limit,
-            totalPages: Math.ceil(auditLog.length / limit)
-        };
-    }
-};

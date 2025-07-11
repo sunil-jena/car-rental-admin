@@ -1,13 +1,7 @@
 'use client'
 import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-
-interface User {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-}
+import { User } from '@/components/types/type';
 
 interface AuthContextType {
     user: User | null;
@@ -28,7 +22,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<User | null>(null);
     const { data: session } = useSession();
 
-    // Sync NextAuth session user into your AuthContext
     useEffect(() => {
         if (session?.user) {
             const { id, email, name, role } = session.user as User;
@@ -38,7 +31,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [session]);
 
-    // Optional: persist user in localStorage (not recommended if using NextAuth session only)
     useEffect(() => {
         if (typeof window !== 'undefined') {
             if (user) {

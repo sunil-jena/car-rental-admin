@@ -44,7 +44,7 @@ const Login = () => {
                 showSuccess('Login successful! Welcome to the admin panel.');
                 router.push('/dashboard');
             } else {
-               showError(res?.error || 'Invalid credentials.');
+                showError(res?.error || 'Invalid credentials.');
             }
         } catch (error: any) {
             showError(error.message || 'An error occurred during login.');
@@ -133,17 +133,11 @@ const Login = () => {
                                     {isLoading ? 'Signing in...' : 'Sign In'}
                                 </Button>
                             </form>
-
-                            {/* <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                                <p className="text-sm text-blue-700 font-medium mb-2">Demo Credentials:</p>
-                                <p className="text-xs text-blue-600">Email: admin@carrentals.com</p>
-                                <p className="text-xs text-blue-600">Password: admin123</p>
-                            </div> */}
                         </CardContent>
                         <CardFooter className="text-center text-sm">
                             <div className="mx-auto">
                                 Don&apos;t have an account?{" "}
-                                <Link href="/signup" className="font-medium text-balck">
+                                <Link href="/" className="font-medium text-balck">
                                     Sign up
                                 </Link>
                             </div>

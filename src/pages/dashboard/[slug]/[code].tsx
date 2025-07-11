@@ -4,9 +4,10 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { prisma } from "@/lib/prisma";
 import EditCar from "@/components/cars/EditCar";
+import { CarListing } from "@/components/types/type";
 
 interface PageProps {
-    car: any;
+    car: CarListing;
 }
 
 export default function CarDetailsPage({ car }: PageProps) {

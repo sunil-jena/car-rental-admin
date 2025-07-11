@@ -3,7 +3,7 @@ import AuditLog from '@/components/audit/AuditLog';
 import { GetServerSideProps } from 'next';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 export default function AuditLogPage({ auditEntries, total, page, limit, totalPages, statusData, pageSizeOptions }: any) {
     return (

@@ -2,8 +2,9 @@
 import { GetServerSideProps } from 'next';
 import { prisma } from '@/lib/prisma';
 import DashboardPage from '@/components/dashboard/Dashboard';
-import { authOptions } from '../api/auth/[...nextauth]';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
+import { CarListing } from '@/components/types/type';
 
 export default function Dashboard({
     listings,
@@ -14,7 +15,7 @@ export default function Dashboard({
     currentStatus,
     pageSizeOptions,
 }: {
-    listings: any;
+    listings: CarListing;
     total: number;
     page: number;
     limit: number;
@@ -38,7 +39,7 @@ export default function Dashboard({
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const session = await getServerSession(context.req, context.res, authOptions);
-    
+
     if (!session) {
         return {
             redirect: {

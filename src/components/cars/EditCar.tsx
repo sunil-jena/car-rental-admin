@@ -5,10 +5,11 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "../layout/Layout";
 import dynamic from "next/dynamic";
-import CarFormFieldsSkeleton from "./components/skeletons/CarFormFieldsSkeleton";
-import CarFormHeaderSkeleton from "./components/skeletons/CarFormHeaderSkeleton";
-import { useAuth } from "../context/AuthContext";
-import { useFeedback } from "../context/FeedbackContext";
+import CarFormFieldsSkeleton from "@/components/cars/components/skeletons/CarFormFieldsSkeleton";
+import CarFormHeaderSkeleton from "@/components/cars/components/skeletons/CarFormHeaderSkeleton";
+import { useAuth } from "@/components/context/AuthContext";
+import { useFeedback } from "@/components/context/FeedbackContext";
+import { CarListing } from "@/components/types/type";
 
 const CarFormHeader = dynamic(() => import('@/components/cars/components/CarFormHeader'), {
     ssr: false,
@@ -20,7 +21,7 @@ const CarFormFields = dynamic(() => import('@/components/cars/components/CarForm
     loading: () => <CarFormFieldsSkeleton />,
 });
 
-const EditCar = ({ car }: { car: any, }) => {
+const EditCar = ({ car }: { car: CarListing, }) => {
     const router = useRouter();
     const { user } = useAuth()
     const { showError, showSuccess } = useFeedback()

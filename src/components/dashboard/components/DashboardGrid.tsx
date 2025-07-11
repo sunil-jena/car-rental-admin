@@ -70,4 +70,4 @@ const DashboardGrid = ({ listings, handleEdit, handleStatusChange, setShowConfir
     </div>
 );
 
-export default DashboardGrid;
+export default React.memo(DashboardGrid);

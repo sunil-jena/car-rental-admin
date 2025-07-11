@@ -25,8 +25,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             },
         });
         if (res.ok) {
-            router.push("/");
-            
+            router.replace("/");
+
         } else {
             console.error("Logout failed");
         }
