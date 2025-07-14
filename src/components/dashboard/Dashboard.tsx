@@ -56,7 +56,6 @@ const DashboardPage = ({
     const router = useRouter();
 
     useEffect(() => {
-        // Update listings state when initialListings prop changes
         setListings(
             initialListings.reduce((acc: any, item: any) => {
                 acc[item.id] = item;

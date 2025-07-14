@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 await prisma.auditLogEntry.create({
                     data: {
                         listingId: existingCar.id,
-                        adminId: adminId, // ensure adminId is passed from frontend
+                        adminId: adminId, 
                         action: 'edited',
                         details: `Updated fields:\n${changes.join('\n')}`,
                         timestamp: new Date(),
